@@ -39,7 +39,3 @@ class Tetromino():
     
     def rotate(self):
         self.status = (self.status+1)%4
-
-
-
-    

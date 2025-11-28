@@ -24,11 +24,11 @@ while True:
             if event.key == pygame.K_RIGHT:
                 if cur_Tetro.getRightIndex() + cur_Tetro.position < col - 1:
                     cur_Tetro.move(1)
-            if event.key ==pygame.K_UP:
+            if event.key == pygame.K_UP:
                 cur_Tetro.rotate()
-                while cur_Tetro.getLeftIndex() + cur_Tetro.position > col:
-                    cur_Tetro.move(-1)
-                while cur_Tetro.getRightIndex() + cur_Tetro.position < 0:
+                while cur_Tetro.getLeftIndex() + cur_Tetro.position < 0:
+                    cur_Tetro.move(1)
+                while cur_Tetro.getRightIndex() + cur_Tetro.position > col - 1:
                     cur_Tetro.move(1)
 
     Main_window.fill("#dfdede")
