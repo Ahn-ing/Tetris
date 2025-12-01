@@ -4,14 +4,22 @@ from board import col, row, score_field, size, Board
 from Tetro import Tetromino
 from Tetromino_list import *
 
+FPS = 60
+
 pygame.init()
 
 Main_window = pygame.display.set_mode(((col + score_field) * size, row * size))
 Game_Board = Board()
 Tetro_L = Tetromino(L)
+clock = pygame.time.Clock()
+
 
 while True:
     cur_Tetro = Tetro_L
+    if cur_Tetro.hit_bottom:
+        cur_Tetro.reset()
+        cur_Tetro = Tetro_L
+    clock.tick(FPS)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

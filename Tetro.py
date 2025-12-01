@@ -1,6 +1,6 @@
 import pygame
-from board import size
-
+from board import size,row
+import random as ran
 
     
 class Tetromino():
@@ -8,15 +8,23 @@ class Tetromino():
     def __init__(self, character,status =0):
         super().__init__()
         self.tetromino = character
-        self.position = 3
+        self.position = 4
         self.status = status
+        self.height = 0
+        self.hit_bottom = False
 
     def draw(self, surface,color):
         for i in range(len(self.tetromino[self.status])):
             for j in range(len(self.tetromino[self.status][i])):
                 if self.tetromino[self.status][i][j] == '1':
-                    pygame.draw.rect(surface,color,((j+self.position)*size,i*size,size-1,size-1))
+                    pygame.draw.rect(surface,color,((j+self.position)*size,(i+self.height)*size,size-1,size-1))
+            if i+self.height > row:
+                self.hit_bottom = True
 
+
+        if pygame.key.get_pressed()[pygame.K_DOWN]:
+            self.height += 1
+        
     def move(self, offset):
         self.position += offset
 
@@ -39,3 +47,9 @@ class Tetromino():
     
     def rotate(self):
         self.status = (self.status+1)%4
+
+    def reset(self):
+        self.hit_bottom = False
+        self.height = 0
+        self.position = 4
+        self.status = ran.randint(0,3)
