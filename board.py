@@ -21,6 +21,12 @@ class Board:
             for j in range(col):
                 if self.board[i][j] == 0:
                     pygame.draw.rect(
-                        surface, "#3f3f3f", (j * size, i * size, size - 1, size - 1)  # 以左上角为原点，第三个参数rec(x,y,x_range,y_range),x是横坐标
+                        surface,
+                        "#3f3f3f",
+                        (
+                            j * size,
+                            i * size,
+                            size - 1,
+                            size - 1,
+                        ),  # 以左上角为原点，第三个参数rec(x,y,x_range,y_range),x是横坐标
                     )
-
