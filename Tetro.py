@@ -1,6 +1,8 @@
 import pygame
-from board import size, row, col
+from board import size, row, col, Board
 import random as ran
+
+Game_Board = Board()
 
 
 class Tetromino:
@@ -14,23 +16,39 @@ class Tetromino:
         self.height = 0
         self.hit_bottom = False
 
+    def putIntoBoard(self):
+        for y in range(len(self.tetromino[self.status])):
+            for x in range(len(self.tetromino[self.status][y])):
+                if self.tetromino[self.status][y][x] == '1':
+                    Game_Board.board[y+self.height][x+self.position] = 1
+
     def draw(self, surface, color):
+        should_lock = False
         for i in range(len(self.tetromino[self.status])):
             for j in range(len(self.tetromino[self.status][i])):
                 if self.tetromino[self.status][i][j] == "1":
+                    global_x = j + self.position
+                    global_y = i + self.height
                     pygame.draw.rect(
                         surface,
                         color,
                         (
-                            (j + self.position) * size,
-                            (i + self.height) * size,
+                            global_x * size,
+                            global_y * size,
                             size - 1,
                             size - 1,
                         ),
                     )
-            if i + self.height > row:
+                    if global_y == row - 1:
+                        should_lock = True
+                    elif  global_y < row-1 and Game_Board.board[global_y + 1][global_x] == 1:
+                        should_lock = True
+            if should_lock:
                 self.hit_bottom = True
+                self.putIntoBoard()
 
+                return
+                                
         if pygame.key.get_pressed()[pygame.K_DOWN]:
             self.height += 1
 
@@ -52,7 +70,7 @@ class Tetromino:
                 if self.tetromino[self.status][i][j] == "1":
                     right_index = max(right_index, j)
         return right_index
-
+    
     def rotate(self):
         self.status = (self.status + 1) % 4
 
@@ -85,3 +103,6 @@ class NewTetromino(Tetromino):
                             size - 1,
                         ),
                     )
+   
+
+        

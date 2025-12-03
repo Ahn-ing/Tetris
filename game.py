@@ -1,7 +1,7 @@
 import pygame
 import sys
-from board import col, row, score_field, size, Board
-from Tetro import Tetromino, NewTetromino
+from board import col, row, score_field, size
+from Tetro import Tetromino, NewTetromino,Game_Board
 from Tetromino_list import *
 import random
 
@@ -10,35 +10,8 @@ FPS = 60
 pygame.init()
 
 Main_window = pygame.display.set_mode(((col + score_field) * size, row * size))
-Game_Board = Board()
-Tetro_list = [
-    "L",
-    "LL",
-    "I",
-    "Z",
-    "ZZ",
-    "W",
-    "H",
-]
-Tetroes = {
-    "L": L,
-    "LL": LL,
-    "I": I,
-    "Z": Z,
-    "ZZ": ZZ,
-    "W": W,
-    "H": H,
-}
 
-color_dict = {
-    "L":    "#d19f32f9",
-    "LL":   "#57b857",
-    "I":    "#a82a2a",
-    "Z":    "#578cb8",
-    "ZZ":   "#ad57b8",
-    "W":    "#b8578c",
-    "H":    "#57b2b8",
-}
+
 
 clock = pygame.time.Clock()
 cur_T = random.choice(Tetro_list)
@@ -78,6 +51,7 @@ while True:
                     cur_Tetro.move(-1)
 
     Main_window.fill("#000000")
+
     Game_Board.drawGrid(Main_window)
     next_Tetro.draw(Main_window, color_dict[next_T])
     cur_Tetro.draw(Main_window, color_dict[cur_T])

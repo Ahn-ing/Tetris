@@ -30,3 +30,14 @@ class Board:
                             size - 1,
                         ),  # 以左上角为原点，第三个参数rec(x,y,x_range,y_range),x是横坐标
                     )
+                elif self.board[i][j] == 1:
+                    pygame.draw.rect(
+                        surface,
+                        "#8B8B8B",
+                        (
+                            j * size,
+                            i * size,
+                            size - 1,
+                            size - 1,
+                        ),  # 以左上角为原点，第三个参数rec(x,y,x_range,y_range),x是横坐标
+                    )
