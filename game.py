@@ -5,7 +5,7 @@ from Tetro import Tetromino, NewTetromino,Game_Board
 from Tetromino_list import *
 import random
 
-FPS = 60
+FPS = 30
 
 pygame.init()
 
@@ -38,10 +38,10 @@ while True:
             sys.exit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                if cur_Tetro.getLeftIndex() + cur_Tetro.position > 0:
+                if cur_Tetro.getLeftIndex() + cur_Tetro.position > 0 and not cur_Tetro.collide_left:
                     cur_Tetro.move(-1)
             if event.key == pygame.K_RIGHT:
-                if cur_Tetro.getRightIndex() + cur_Tetro.position < col - 1:
+                if cur_Tetro.getRightIndex() + cur_Tetro.position < col - 1 and not cur_Tetro.collide_right:
                     cur_Tetro.move(1)
             if event.key == pygame.K_UP:
                 cur_Tetro.rotate()

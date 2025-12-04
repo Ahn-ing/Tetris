@@ -15,6 +15,8 @@ class Tetromino:
         self.status = status
         self.height = 0
         self.hit_bottom = False
+        self.collide_left = False
+        self.collide_right = False
 
     def putIntoBoard(self):
         for y in range(len(self.tetromino[self.status])):
@@ -24,6 +26,9 @@ class Tetromino:
 
     def draw(self, surface, color):
         should_lock = False
+        self.collide_left = False
+        self.collide_right =False
+        
         for i in range(len(self.tetromino[self.status])):
             for j in range(len(self.tetromino[self.status][i])):
                 if self.tetromino[self.status][i][j] == "1":
@@ -43,6 +48,11 @@ class Tetromino:
                         should_lock = True
                     elif  global_y < row-1 and Game_Board.board[global_y + 1][global_x] == 1:
                         should_lock = True
+                    if global_x -1 >= 0 and Game_Board.board[global_y][global_x-1] == 1:
+                        self.collide_left = True
+                    if global_x + 1 < col and Game_Board.board[global_y][global_x+1] == 1:
+                        self.collide_right =True
+                    
             if should_lock:
                 self.hit_bottom = True
                 self.putIntoBoard()
