@@ -44,8 +44,27 @@ while True:
                 if cur_Tetro.getRightIndex() + cur_Tetro.position < col - 1 and not cur_Tetro.collide_right:
                     cur_Tetro.move(1)
             if event.key == pygame.K_UP:
+                old_status = cur_Tetro.status
                 cur_Tetro.rotate()
-                while cur_Tetro.getLeftIndex() + cur_Tetro.position < 0:
+
+                if cur_Tetro.is_collide(Game_Board):
+                # === 踢墙逻辑 (Wall Kick) ===
+                # 尝试向右挪一格是否能容纳？
+                    if not cur_Tetro.is_collide(Game_Board, offset_x=1):
+                        cur_Tetro.move(1)
+                    # 尝试向左挪一格是否能容纳？
+                    elif not cur_Tetro.is_collide(Game_Board, offset_x=-1):
+                        cur_Tetro.move(-1)
+                    # 尝试向右挪两格 (主要针对长条I)
+                    elif not cur_Tetro.is_collide(Game_Board, offset_x=2):
+                        cur_Tetro.move(2)
+                    # 尝试向左挪两格
+                    elif not cur_Tetro.is_collide(Game_Board, offset_x=-2):
+                        cur_Tetro.move(-2)
+                    # === 如果左右挪动都无法解决冲突 ===
+                    else:
+                        cur_Tetro.status = old_status  # 4. 退回旋转前的状态 (撤销旋转)
+                while cur_Tetro.getLeftIndex() + cur_Tetro.position < 0 :
                     cur_Tetro.move(1)
                 while cur_Tetro.getRightIndex() + cur_Tetro.position > col - 1:
                     cur_Tetro.move(-1)
