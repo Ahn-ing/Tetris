@@ -72,7 +72,9 @@ while True:
     Main_window.fill("#000000")
 
     Game_Board.drawGrid(Main_window)
+    Game_Board.updateBoard(Main_window)
     next_Tetro.draw(Main_window, color_dict[next_T])
     cur_Tetro.draw(Main_window, color_dict[cur_T])
+    
 
     pygame.display.update()

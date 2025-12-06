@@ -13,8 +13,9 @@ class Board:
     def __init__(
         self,
     ):
-        super(Board, self).__init__()
+        super().__init__()
         self.board = np.zeros((row, col))
+        self.score = 0
 
     def drawGrid(self, surface):
         for i in range(row):
@@ -41,3 +42,23 @@ class Board:
                             size - 1,
                         ),  # 以左上角为原点，第三个参数rec(x,y,x_range,y_range),x是横坐标
                     )
+
+    def eliminate(self):
+        for i in range(row):
+            count = 0
+            for j in range(col):
+                if self.board[i][j] :
+                    count+=1
+            if count == col:
+                self.score += 1
+                self.board[i:i+1] = [0]*col
+                shifted = np.zeros_like(self.board[:i+1])
+                shifted[1:] = self.board[:i]
+                self.board[:i+1] = shifted
+                
+                  
+    def updateBoard(self,surface):
+        self.eliminate()
+        self.drawGrid(surface)
+
+    
