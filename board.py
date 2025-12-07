@@ -63,9 +63,7 @@ class Board:
                 
 
     def drawScore(self,surface):
-        for i in range(row):
-            for j in range(col,col+score_field):
-                pygame.draw.rect(surface,"#000000",(j*size,i*size,size,size))
+        
 
         # 分数标题 
         text_tittle = self.title_font.render("分 数",True,"#5537c0")
