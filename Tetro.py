@@ -2,6 +2,8 @@ import pygame
 from board import size, row, col, Board
 import random as ran
 
+pygame.init()
+pygame.font.init()
 Game_Board = Board()
 
 

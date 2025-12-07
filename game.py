@@ -7,7 +7,7 @@ import random
 
 FPS = 30
 
-pygame.init()
+
 
 Main_window = pygame.display.set_mode(((col + score_field) * size, row * size))
 

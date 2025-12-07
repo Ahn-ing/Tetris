@@ -17,6 +17,11 @@ class Board:
         self.board = np.zeros((row, col))
         self.score = 0
 
+        # --- 新增：初始化字体 ---
+        # 使用系统字体 'Arial' (或 'SimHei' 支持中文)，字号 30，加粗 True
+        self.title_font = pygame.font.SysFont('SimHei', 30, True)
+        self.score_font = pygame.font.SysFont('Arial', 40, True)
+
     def drawGrid(self, surface):
         for i in range(row):
             for j in range(col):
@@ -50,15 +55,38 @@ class Board:
                 if self.board[i][j] :
                     count+=1
             if count == col:
-                self.score += 1
+                self.score += 10
                 self.board[i:i+1] = [0]*col
                 shifted = np.zeros_like(self.board[:i+1])
                 shifted[1:] = self.board[:i]
                 self.board[:i+1] = shifted
                 
-                  
+
+    def drawScore(self,surface):
+        for i in range(row):
+            for j in range(col,col+score_field):
+                pygame.draw.rect(surface,"#000000",(j*size,i*size,size,size))
+
+        # 分数标题 
+        text_tittle = self.title_font.render("分 数",True,"#5537c0")
+        
+        start_x = (col+score_field//2-1)*size
+        start_y = (row*size)*0.6
+
+        surface.blit(text_tittle,(start_x,start_y))
+        # 分数显示
+        text_score = self.score_font.render(str(self.score),True,"#317e4b")
+
+        surface.blit(text_score,(start_x+size//2,start_y+2*size))
+
+        
+              
     def updateBoard(self,surface):
         self.eliminate()
+        self.drawScore(surface)
         self.drawGrid(surface)
+
+    
+
 
     
