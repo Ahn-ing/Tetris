@@ -19,7 +19,18 @@ next_T = random.choice(Tetro_list)
 
 cur_Tetro = Tetromino(Tetroes[cur_T])
 next_Tetro = NewTetromino(Tetroes[next_T])
+
+drop_timer = 0
+drop_interval = 500
+
 while True:
+    drop_timer += clock.tick(FPS)
+    if drop_timer > drop_interval:
+        if not cur_Tetro.is_collide(Game_Board,offset_y=1):
+            cur_Tetro.height += 1
+        else:
+            cur_Tetro.hit_bottom = True
+        drop_timer = 0
 
     if cur_Tetro.hit_bottom:
         cur_Tetro.reset()
@@ -30,7 +41,9 @@ while True:
         next_T = random.choice(Tetro_list)
         next_Tetro = NewTetromino(Tetroes[next_T])
 
-    clock.tick(FPS)
+        drop_timer = 0
+
+    
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
