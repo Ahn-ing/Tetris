@@ -3,7 +3,7 @@ import numpy as np
 
 col = 10  # 列数
 row = 25  # 行数
-size = 45  # 格子大小
+size = 25  # 格子大小
 score_field = 6  # 得分窗口列数
 
 
