@@ -56,12 +56,11 @@ class Tetromino:
                     if global_x + 1 < col and Game_Board.board[global_y][global_x+1] == 1:
                         self.collide_right =True
                     
-        # 循环结束后再锁定，保证完成绘制
-        if should_lock:
-            self.hit_bottom = True
-            self.putIntoBoard()
+            if should_lock:
+                self.hit_bottom = True
+                self.putIntoBoard()
 
-            return
+                return
                                 
         if pygame.key.get_pressed()[pygame.K_DOWN]:
             self.height += 1
