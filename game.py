@@ -22,11 +22,6 @@ next_Tetro = NewTetromino(Tetroes[next_T])
 
 
 while True:
-    drop_timer += clock.tick(FPS)
-    if drop_timer > drop_interval:
-        cur_Tetro.height += 1
-        
-        drop_timer = 0
 
     cur_Tetro.drop_timer += clock.tick(FPS)
 
