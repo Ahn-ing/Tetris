@@ -19,9 +19,14 @@ next_T = random.choice(Tetro_list)
 
 cur_Tetro = Tetromino(Tetroes[cur_T])
 next_Tetro = NewTetromino(Tetroes[next_T])
+
+
 while True:
 
+    cur_Tetro.drop_timer += clock.tick(FPS)
+
     if cur_Tetro.hit_bottom:
+        cur_Tetro.putIntoBoard()
         cur_Tetro.reset()
         # 创建新的当前方块，从顶部开始
         cur_T = next_T
@@ -30,20 +35,23 @@ while True:
         next_T = random.choice(Tetro_list)
         next_Tetro = NewTetromino(Tetroes[next_T])
 
-    clock.tick(FPS)
+        cur_Tetro.drop_timer = 0
 
+    
+    
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_LEFT :
                 if cur_Tetro.getLeftIndex() + cur_Tetro.position > 0 and not cur_Tetro.collide_left:
                     cur_Tetro.move(-1)
-            if event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_RIGHT :
                 if cur_Tetro.getRightIndex() + cur_Tetro.position < col - 1 and not cur_Tetro.collide_right:
                     cur_Tetro.move(1)
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_UP :
                 old_status = cur_Tetro.status
                 cur_Tetro.rotate()
 
