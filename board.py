@@ -3,7 +3,7 @@ import numpy as np
 
 col = 10  # 列数
 row = 25  # 行数
-size = 45  # 格子大小
+size = 25  # 格子大小
 score_field = 6  # 得分窗口列数
 
 
@@ -47,19 +47,18 @@ class Board:
                             size - 1,
                         ),  # 以左上角为原点，第三个参数rec(x,y,x_range,y_range),x是横坐标
                     )
-
     def eliminate(self):
-        for i in range(row):
-            count = 0
-            for j in range(col):
-                if self.board[i][j] :
-                    count+=1
-            if count == col:
-                self.score += 10
-                self.board[i:i+1] = [0]*col
-                shifted = np.zeros_like(self.board[:i+1])
-                shifted[1:] = self.board[:i]
-                self.board[:i+1] = shifted
+        lines_cleared = 0
+        for i in range(row-1, -1, -1):  # 从底部向上检查
+            if np.all(self.board[i] == 1):
+                lines_cleared += 1
+                # 上方行整体下移
+                self.board[1:i+1] = self.board[0:i]
+                # 清空最顶行
+                self.board[0] = np.zeros(col)
+        
+        self.score += lines_cleared * 10
+        return lines_cleared
                 
 
     def drawScore(self,surface):
