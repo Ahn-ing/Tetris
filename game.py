@@ -20,8 +20,19 @@ next_T = random.choice(Tetro_list)
 cur_Tetro = Tetromino(Tetroes[cur_T])
 next_Tetro = NewTetromino(Tetroes[next_T])
 
+game_over = False
+
 
 while True:
+    if game_over:
+        Game_Board.drawGameOver(Main_window)
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        continue
 
     cur_Tetro.drop_timer += clock.tick(FPS)
 
@@ -36,6 +47,11 @@ while True:
         next_Tetro = NewTetromino(Tetroes[next_T])
 
         cur_Tetro.drop_timer = 0
+    
+        if cur_Tetro.check_game_over():
+            game_over = True
+            
+            
 
     
     

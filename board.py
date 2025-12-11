@@ -21,6 +21,7 @@ class Board:
         # 使用系统字体 'Arial' (或 'SimHei' 支持中文)，字号 30，加粗 True
         self.title_font = pygame.font.SysFont('SimHei', 30, True)
         self.score_font = pygame.font.SysFont('Arial', 40, True)
+        self.game_over_font = pygame.font.SysFont('SimHei', 40, True)
 
     def drawGrid(self, surface):
         for i in range(row):
@@ -76,13 +77,18 @@ class Board:
 
         surface.blit(text_score,(start_x+size//2,start_y+2*size))
 
-        
+    def drawGameOver(self,surface):
+        text_game_over = self.game_over_font.render("游戏结束",True,"#c03e3e")
+        text_rect = text_game_over.get_rect(center=(surface.get_width()//2, surface.get_height()//2))
+        surface.blit(text_game_over, text_rect)
+
               
     def updateBoard(self,surface):
         self.eliminate()
         self.drawScore(surface)
         self.drawGrid(surface)
 
+    
     
 
 

@@ -126,6 +126,19 @@ class Tetromino:
     
     def rotate(self):
         self.status = (self.status + 1) % 4
+    
+    def check_game_over(self):
+        for i in range(len(self.tetromino[self.status])):
+            for j in range(len(self.tetromino[self.status][i])):
+                if self.tetromino[self.status][i][j] == "1":
+                    global_x = j + 4
+                    global_y = i
+
+                    if 0<= global_x < col and 0<= global_y < row:  # 检测是否越界
+                        if Game_Board.board[global_y][global_x] == 1:
+                            return True
+        
+        return False
 
     def reset(self):
         self.hit_bottom = False
@@ -157,5 +170,7 @@ class NewTetromino(Tetromino):
                         ),
                     )
    
+   
+
 
         
