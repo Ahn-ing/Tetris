@@ -38,26 +38,27 @@ class Tetromino:
         # 每次while时都会调用draw
         self.collide_left = False
         self.collide_right =False
+
+        self.drop_timer += dt
+        if self.drop_timer >= self.drop_speed:
+            if not self.is_collide(Game_Board,offset_y=1):
+                self.height += 1
+            self.drop_timer = 0
+        
+        if pygame.key.get_pressed()[pygame.K_DOWN]:
+            if not self.is_collide(Game_Board,offset_y=1):# 退回到用碰撞函数判断，避免穿透
+                self.height += 1
+            else:
+                self.lock_timer += 250  # 快速下落时增加锁定时间
+
         grounded = self.is_collide(Game_Board,offset_y=1)
 
-        if grounded:
+        if grounded:  # 先处理下落，下落处理完后在再判断是否需要锁定
             self.lock_timer += dt
             if self.lock_timer >= self.lock_delay:
                 self.hit_bottom = True
         else:
             self.lock_timer = 0
-
-        self.drop_timer += dt
-        if self.drop_timer >= self.drop_speed:
-            if not grounded:
-                self.height += 1
-            self.drop_timer = 0
-        
-        if pygame.key.get_pressed()[pygame.K_DOWN]:
-            if not grounded:
-                self.height += 1
-            else:
-                self.lock_timer += 250  # 快速下落时增加锁定时间
 
         for i in range(len(self.tetromino[self.status])):
             for j in range(len(self.tetromino[self.status][i])):
