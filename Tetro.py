@@ -21,6 +21,8 @@ class Tetromino:
         self.collide_right = False
         self.drop_timer = 0
         self.drop_speed = 500
+        self.lock_timer = 0
+        self.lock_delay = 500  # ms
 
     def putIntoBoard(self):
         for y in range(len(self.tetromino[self.status])):
@@ -32,24 +34,30 @@ class Tetromino:
                     if global_x >= 0 and global_x < col and global_y >= 0 and global_y < row:
                         Game_Board.board[global_y][global_x] = 1
 
-    def draw(self, surface, color):
+    def draw(self, surface, color, dt):
         # 每次while时都会调用draw
         self.collide_left = False
         self.collide_right =False
+        grounded = self.is_collide(Game_Board,offset_y=1)
 
-        if self.drop_timer >= self.drop_speed:
-            if not self.is_collide(Game_Board,offset_y=1):
-                self.height += 1
-            else:
+        if grounded:
+            self.lock_timer += dt
+            if self.lock_timer >= self.lock_delay:
                 self.hit_bottom = True
+        else:
+            self.lock_timer = 0
 
+        self.drop_timer += dt
+        if self.drop_timer >= self.drop_speed:
+            if not grounded:
+                self.height += 1
             self.drop_timer = 0
         
         if pygame.key.get_pressed()[pygame.K_DOWN]:
-            if not self.is_collide(Game_Board,offset_y=1):
+            if not grounded:
                 self.height += 1
             else:
-                self.hit_bottom = True
+                self.lock_timer += 250  # 快速下落时增加锁定时间
 
         for i in range(len(self.tetromino[self.status])):
             for j in range(len(self.tetromino[self.status][i])):
@@ -66,10 +74,6 @@ class Tetromino:
                             size - 1,
                         ),
                     )
-                    if global_y >= row - 1:
-                        self.hit_bottom = True
-                    elif  global_y < row-1 and Game_Board.board[global_y + 1][global_x] == 1:
-                        self.hit_bottom = True
                     if global_x -1 >= 0 and Game_Board.board[global_y][global_x-1] == 1:
                         self.collide_left = True
                     if global_x + 1 < col and Game_Board.board[global_y][global_x+1] == 1:
@@ -145,6 +149,8 @@ class Tetromino:
         self.height = 0
         self.position = 4
         self.status = ran.randint(0, 3)
+        self.drop_timer = 0
+        self.lock_timer = 0
 
 
 class NewTetromino(Tetromino):

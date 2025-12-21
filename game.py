@@ -33,8 +33,7 @@ while True:
                 pygame.quit()
                 sys.exit()
         continue
-
-    cur_Tetro.drop_timer += clock.tick(FPS)
+    dt = clock.tick(FPS)
 
     if cur_Tetro.hit_bottom:
         cur_Tetro.putIntoBoard()
@@ -45,15 +44,10 @@ while True:
         # 生成新的下一个方块，仅用于右侧显示
         next_T = random.choice(Tetro_list)
         next_Tetro = NewTetromino(Tetroes[next_T])
-
-        cur_Tetro.drop_timer = 0
     
         if cur_Tetro.check_game_over():
             game_over = True
             
-            
-
-    
     
     
     for event in pygame.event.get():
@@ -98,7 +92,7 @@ while True:
     Game_Board.drawGrid(Main_window)
     Game_Board.updateBoard(Main_window)
     next_Tetro.draw(Main_window, color_dict[next_T])
-    cur_Tetro.draw(Main_window, color_dict[cur_T])
+    cur_Tetro.draw(Main_window, color_dict[cur_T],dt)
     
 
     pygame.display.update()
