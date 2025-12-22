@@ -21,6 +21,7 @@ cur_Tetro = Tetromino(Tetroes[cur_T])
 next_Tetro = NewTetromino(Tetroes[next_T])
 
 game_over = False
+game_pause = False
 
 
 while True:
@@ -33,6 +34,18 @@ while True:
                 pygame.quit()
                 sys.exit()
         continue
+
+    if game_pause:
+        Game_Board.drawGamePause(Main_window)
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    game_pause = not game_pause
+
+        continue
+
     dt = clock.tick(FPS)
 
     if cur_Tetro.hit_bottom:
@@ -54,7 +67,11 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                game_pause = not game_pause
+
             if event.key == pygame.K_LEFT :
                 if not cur_Tetro.is_collide(offset_x=-1):
                     cur_Tetro.move(-1)

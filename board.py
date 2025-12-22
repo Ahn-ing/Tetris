@@ -22,6 +22,7 @@ class Board:
         self.title_font = pygame.font.SysFont('SimHei', 30, True)
         self.score_font = pygame.font.SysFont('Arial', 40, True)
         self.game_over_font = pygame.font.SysFont('SimHei', 40, True)
+        self.game_pause_font = pygame.font.SysFont('SimHei', 40, True)
 
     def drawGrid(self, surface):
         for i in range(row):
@@ -78,9 +79,14 @@ class Board:
         surface.blit(text_score,(start_x+size//2,start_y+2*size))
 
     def drawGameOver(self,surface):
-        text_game_over = self.game_over_font.render("游戏结束",True,"#c03e3e")
-        text_rect = text_game_over.get_rect(center=(surface.get_width()//2, surface.get_height()//2))
-        surface.blit(text_game_over, text_rect)
+        text_game_over = self.game_over_font.render("游戏结束",True,"#c03e3e") # 第四个参数是背景色
+        text_game_over_rect = text_game_over.get_rect(center=(surface.get_width()//2, surface.get_height()//2))
+        surface.blit(text_game_over, text_game_over_rect)
+
+    def drawGamePause(self,surface):
+        text_game_pause = self.game_pause_font.render("游戏暂停",True,"#c0a33e")
+        text_game_pause_rect = text_game_pause.get_rect(center=(surface.get_width()//2, surface.get_height()//2))
+        surface.blit(text_game_pause, text_game_pause_rect)
 
               
     def updateBoard(self,surface):
