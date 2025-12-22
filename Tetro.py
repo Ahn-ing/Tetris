@@ -17,8 +17,6 @@ class Tetromino:
         self.status = status
         self.height = 0
         self.hit_bottom = False
-        self.collide_left = False
-        self.collide_right = False
         self.drop_timer = 0
         self.drop_speed = 500
         self.lock_timer = 0
@@ -36,22 +34,20 @@ class Tetromino:
 
     def draw(self, surface, color, dt):
         # 每次while时都会调用draw
-        self.collide_left = False
-        self.collide_right =False
-
+        
         self.drop_timer += dt
         if self.drop_timer >= self.drop_speed:
-            if not self.is_collide(Game_Board,offset_y=1):
+            if not self.is_collide(offset_y=1):
                 self.height += 1
             self.drop_timer = 0
         
         if pygame.key.get_pressed()[pygame.K_DOWN]:
-            if not self.is_collide(Game_Board,offset_y=1):# 退回到用碰撞函数判断，避免穿透
+            if not self.is_collide(offset_y=1):# 退回到用碰撞函数判断，避免穿透
                 self.height += 1
             else:
                 self.lock_timer += 250  # 快速下落时增加锁定时间
 
-        grounded = self.is_collide(Game_Board,offset_y=1)
+        grounded = self.is_collide(offset_y=1)
 
         if grounded:  # 先处理下落，下落处理完后在再判断是否需要锁定
             self.lock_timer += dt
@@ -74,21 +70,14 @@ class Tetromino:
                             size - 1,
                             size - 1,
                         ),
-                    )
-                    if global_x -1 >= 0 and Game_Board.board[global_y][global_x-1] == 1:
-                        self.collide_left = True
-                    if global_x + 1 < col and Game_Board.board[global_y][global_x+1] == 1:
-                        self.collide_right =True
-                    
+                    )                
                 
-                                
-
+                    
     def move(self, offset):
         self.position += offset
 
-        return False
     
-    def is_collide(self, board_obj, offset_x=0, offset_y=0, check_status=None):
+    def is_collide(self,  offset_x=0, offset_y=0, check_status=None):
         """
         检测碰撞的辅助函数
         offset_x, offset_y: 用于测试由于踢墙移动后的位置
@@ -107,27 +96,17 @@ class Tetromino:
                     if global_y >= row:
                         return True
                     
-                    # 2. 检查是否与已有的方块重叠 (Game_Board)
-                    # 注意：只检查 global_y >= 0 的情况，防止还没进场就报错
-                    if global_y >= 0 and board_obj.board[global_y][global_x] == 1:
+                    # 2. 检查左右边界
+                    if global_x < 0 or global_x >= col:
                         return True
+                    
+                    # 3. 检查是否与已有的方块重叠 (Game_Board)
+                    # 注意：只检查边界内的情况，防止还没进场就报错
+                    if global_y >= 0 and Game_Board.board[global_y][global_x] == 1:
+                        return True
+                                    
         return False
 
-    def getLeftIndex(self):  # 返回的是方块内部的形状索引，并不是全局的位置
-        left_index = float("inf")
-        for i in range(len(self.tetromino[self.status])):
-            for j in range(len(self.tetromino[self.status][i])):
-                if self.tetromino[self.status][i][j] == "1":
-                    left_index = min(left_index, j)
-        return left_index
-
-    def getRightIndex(self):
-        right_index = float("-inf")
-        for i in range(len(self.tetromino[self.status])):
-            for j in range(len(self.tetromino[self.status][i])):
-                if self.tetromino[self.status][i][j] == "1":
-                    right_index = max(right_index, j)
-        return right_index
     
     def rotate(self):
         self.status = (self.status + 1) % 4
