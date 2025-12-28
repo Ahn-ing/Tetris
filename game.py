@@ -1,16 +1,16 @@
-import pygame
-import sys
-from board import col, row, score_field, size
-from Tetro import Tetromino, NewTetromino,Game_Board
-from Tetromino_list import *
 import random
+import sys
+
+import pygame
+
+from board import col, row, score_field, size
+from Tetro import Game_Board, NewTetromino, Tetromino
+from Tetromino_list import *
 
 FPS = 30
 
 
-
 Main_window = pygame.display.set_mode(((col + score_field) * size, row * size))
-
 
 
 clock = pygame.time.Clock()
@@ -57,44 +57,42 @@ while True:
         # 生成新的下一个方块，仅用于右侧显示
         next_T = random.choice(Tetro_list)
         next_Tetro = NewTetromino(Tetroes[next_T])
-    
+
         if cur_Tetro.check_game_over():
             game_over = True
-            
-    
-    
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 game_pause = not game_pause
 
-            if event.key == pygame.K_LEFT :
+            if event.key == pygame.K_LEFT:
                 if not cur_Tetro.is_collide(offset_x=-1):
                     cur_Tetro.move(-1)
-            if event.key == pygame.K_RIGHT :
+            if event.key == pygame.K_RIGHT:
                 if not cur_Tetro.is_collide(offset_x=1):
                     cur_Tetro.move(1)
-            if event.key == pygame.K_UP :
+            if event.key == pygame.K_UP:
                 old_status = cur_Tetro.status
                 cur_Tetro.rotate()
 
                 if cur_Tetro.is_collide():
-                # === 踢墙逻辑 (Wall Kick) ===
-                # 尝试向右挪一格是否能容纳？
-                    if not cur_Tetro.is_collide( offset_x=1):
+                    # === 踢墙逻辑 (Wall Kick) ===
+                    # 尝试向右挪一格是否能容纳？
+                    if not cur_Tetro.is_collide(offset_x=1):
                         cur_Tetro.move(1)
                     # 尝试向左挪一格是否能容纳？
-                    elif not cur_Tetro.is_collide( offset_x=-1):
+                    elif not cur_Tetro.is_collide(offset_x=-1):
                         cur_Tetro.move(-1)
                     # 尝试向右挪两格 (主要针对长条I)
-                    elif not cur_Tetro.is_collide( offset_x=2):
+                    elif not cur_Tetro.is_collide(offset_x=2):
                         cur_Tetro.move(2)
                     # 尝试向左挪两格
-                    elif not cur_Tetro.is_collide( offset_x=-2):
+                    elif not cur_Tetro.is_collide(offset_x=-2):
                         cur_Tetro.move(-2)
                     # === 如果左右挪动都无法解决冲突 ===
                     else:
@@ -105,7 +103,6 @@ while True:
     Game_Board.drawGrid(Main_window)
     Game_Board.updateBoard(Main_window)
     next_Tetro.draw(Main_window, color_dict[next_T])
-    cur_Tetro.draw(Main_window, color_dict[cur_T],dt)
-    
+    cur_Tetro.draw(Main_window, color_dict[cur_T], dt)
 
     pygame.display.update()

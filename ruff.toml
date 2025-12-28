@@ -1,0 +1,12 @@
+
+target-version = "py311"
+line-length = 88
+exclude = ["__pycache__"]
+
+[lint]
+select = ["E", "F", "W", "I"]
+
+ignore = ["E501"]
+
+[lint.per-file-ignores]
+"game.py" = ["F403","F405"]

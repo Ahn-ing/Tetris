@@ -1,6 +1,8 @@
-import pygame
-from board import size, row, col, Board
 import random as ran
+
+import pygame
+
+from board import Board, col, row, size
 
 pygame.init()
 pygame.font.init()
@@ -25,24 +27,29 @@ class Tetromino:
     def putIntoBoard(self):
         for y in range(len(self.tetromino[self.status])):
             for x in range(len(self.tetromino[self.status][y])):
-                if self.tetromino[self.status][y][x] == '1':
+                if self.tetromino[self.status][y][x] == "1":
                     global_x = x + self.position
                     global_y = y + self.height
 
-                    if global_x >= 0 and global_x < col and global_y >= 0 and global_y < row:
+                    if (
+                        global_x >= 0
+                        and global_x < col
+                        and global_y >= 0
+                        and global_y < row
+                    ):
                         Game_Board.board[global_y][global_x] = 1
 
     def draw(self, surface, color, dt):
         # 每次while时都会调用draw
-        
+
         self.drop_timer += dt
         if self.drop_timer >= self.drop_speed:
             if not self.is_collide(offset_y=1):
                 self.height += 1
             self.drop_timer = 0
-        
+
         if pygame.key.get_pressed()[pygame.K_DOWN]:
-            if not self.is_collide(offset_y=1):# 退回到用碰撞函数判断，避免穿透
+            if not self.is_collide(offset_y=1):  # 退回到用碰撞函数判断，避免穿透
                 self.height += 1
             else:
                 self.lock_timer += 250  # 快速下落时增加锁定时间
@@ -70,24 +77,22 @@ class Tetromino:
                             size - 1,
                             size - 1,
                         ),
-                    )                
-                
-                    
+                    )
+
     def move(self, offset):
         self.position += offset
 
-    
-    def is_collide(self,  offset_x=0, offset_y=0, check_status=None):
+    def is_collide(self, offset_x=0, offset_y=0, check_status=None):
         """
         检测碰撞的辅助函数
         offset_x, offset_y: 用于测试由于踢墙移动后的位置
         check_status: 用于测试旋转后的状态
         """
         status_to_check = self.status if check_status is None else check_status
-        
+
         for y in range(len(self.tetromino[status_to_check])):
             for x in range(len(self.tetromino[status_to_check][y])):
-                if self.tetromino[status_to_check][y][x] == '1':
+                if self.tetromino[status_to_check][y][x] == "1":
                     # 计算在整个棋盘上的绝对坐标
                     global_x = x + self.position + offset_x
                     global_y = y + self.height + offset_y
@@ -95,22 +100,21 @@ class Tetromino:
                     # 1. 检查 底部
                     if global_y >= row:
                         return True
-                    
+
                     # 2. 检查左右边界
                     if global_x < 0 or global_x >= col:
                         return True
-                    
+
                     # 3. 检查是否与已有的方块重叠 (Game_Board)
                     # 注意：只检查边界内的情况，防止还没进场就报错
                     if global_y >= 0 and Game_Board.board[global_y][global_x] == 1:
                         return True
-                                    
+
         return False
 
-    
     def rotate(self):
         self.status = (self.status + 1) % 4
-    
+
     def check_game_over(self):
         for i in range(len(self.tetromino[self.status])):
             for j in range(len(self.tetromino[self.status][i])):
@@ -118,10 +122,10 @@ class Tetromino:
                     global_x = j + 4
                     global_y = i
 
-                    if 0<= global_x < col and 0<= global_y < row:  # 检测是否越界
+                    if 0 <= global_x < col and 0 <= global_y < row:  # 检测是否越界
                         if Game_Board.board[global_y][global_x] == 1:
                             return True
-        
+
         return False
 
     def reset(self):
@@ -155,8 +159,3 @@ class NewTetromino(Tetromino):
                             size - 1,
                         ),
                     )
-   
-   
-
-
-        
